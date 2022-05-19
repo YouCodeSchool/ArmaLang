@@ -21,4 +21,6 @@ Here is some functionalities which will be available in the soon future:
 - OS Module
 - Simple web Framework based on Koa
 # Documentation 
-the full documentation will be under docs directory
+the full documentation will be under docs directory 
+1. [Darija] (https://github.com/ibrahimesseddyq/ArmaLang/tree/main/docs/darija)
+2. [English](https://github.com/ibrahimesseddyq/ArmaLang/blob/main/docs/english/README.md)
