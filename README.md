@@ -13,8 +13,7 @@ for  morroccan people using:
 # To Do List
 Here is some functionalities which will be available in the soon future:
 - function definition without arrow functions
-- return keyword
-- asynchronous
+- keywords: return , async await,break,continue...
 - Design patterns
 - Http module
 - Filesystem 
