@@ -28,6 +28,7 @@ Here is some functionalities which will be available in the soon future:
 - array && objects 
 - asynchronous
 - OOP support
+
 - Http module
 - Filesystem Module
 - OS Module
@@ -42,3 +43,4 @@ the full documentation will be under docs directory
 # People Who Contributed in the Project
 
 - ArmaLang Logo's made by Abdesslam El boukri @Abdessalam-Elboukri
+
