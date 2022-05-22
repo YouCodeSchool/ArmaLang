@@ -10,7 +10,10 @@ function zid(x, y) {
 }
 
 function lsse9(s1, s2) {
-    return s1 + s2;
+    if (!s1.concat) {
+        throw new Error(`${x} mt9derch tls9ha.`);
+    }
+    return s1.concat(s2);
 }
 
 function dreb(x, y) {
@@ -33,7 +36,7 @@ function jider(x) {
     return Math.sqrt(x);
 }
 
-function _90wa(x, y) {
+function _9owa(x, y) {
     return Math.pow(x, y);
 }
 
@@ -45,7 +48,7 @@ function tyssawi(x, y) {
     return x === y;
 }
 
-function $ilakan(cond, consequent, alternate) {
+function ilakan(cond, consequent, alternate) {
     if (cond) {
         return consequent();
     } else {
@@ -77,4 +80,23 @@ function mnTal(start, end) {
 
 function lkolWahd(arr, fun) {
     arr.forEach(fun);
+}
+module.exports = {
+    kteb,
+    zid,
+    lsse9,
+    dreb,
+    n9ess,
+    _9ssem,
+    modulo,
+    jider,
+    _9owa,
+    _9reb,
+    tyssawi,
+    ilakan,
+    ola,
+    f,
+    mahed,
+    mnTal,
+    lkolWahd
 }

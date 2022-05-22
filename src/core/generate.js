@@ -1,5 +1,6 @@
 const fs = require("mz/fs");
-
+const { autoImport } = require("./auto-import");
+var functions = [];
 async function main() {
     const filename = process.argv[2];
     if (!filename) {
@@ -8,9 +9,13 @@ async function main() {
     }
 
     const astJson = (await fs.readFile(filename)).toString();
-    const runtimeJs = (await fs.readFile("./src/lib/standard.js")).toString();
+    // const runtimeJs = (await fs.readFile("./src/lib/standard.js")).toString();
     const statements = JSON.parse(astJson);
-    const jsCode = generateJsForStatements(statements) + "\n" + runtimeJs;
+
+    const firstJsCode = generateJsForStatements(statements) + "\n";
+    const runtimeJs = autoImport(functions);
+    jsCode = runtimeJs + firstJsCode;
+    // const jsCode = generateJsForStatements(statements) + "\n" + runtimeJs;
     const outputFilename = filename.replace(".ast", ".js");
     await fs.writeFile(outputFilename, jsCode);
     console.log(`Wrote ${outputFilename}.\n\n\n------------------------------`);
@@ -25,7 +30,10 @@ function generateJsForStatements(statements) {
     return lines.join("\n");
 }
 
+
 function generateJsForStatementOrExpr(node) {
+    let paramList;
+    let jsBody;
     switch (node.type) {
         case "var_assign":
             const varName = node.var_name.value;
@@ -34,9 +42,7 @@ function generateJsForStatementOrExpr(node) {
             return js;
         case "fun_call":
             let funName = node.fun_name.value;
-            if (funName === "ilakan") {
-                funName = "$ilakan";
-            }
+            functions.push(funName);
             const argList = node.arguments.map((arg) => {
                 return generateJsForStatementOrExpr(arg);
             }).join(", ");
@@ -46,10 +52,10 @@ function generateJsForStatementOrExpr(node) {
         case "identifier":
             return node.value;
         case "lambda":
-            const paramList = node.parameters
+            paramList = node.parameters
                 .map(param => param.value)
                 .join(", ");
-            const jsBody = node.body.map((arg, i) => {
+            jsBody = node.body.map((arg, i) => {
                 const jsCode = generateJsForStatementOrExpr(arg);
                 if (i === node.body.length - 1) {
                     return "return " + jsCode;
@@ -59,19 +65,16 @@ function generateJsForStatementOrExpr(node) {
             }).join(";\n");
             return `function (${paramList}) {\n${indent(jsBody)}\n}`;
         case "funcdef":
-            let funcname = node.identifier;
-            let funcargs = node.arguments
-                .map(arg => arg.value)
+            let funcName = node.identifier.value;
+            paramList = node.parameters
+                .map(param => param.value)
                 .join(", ");
-            const funcBody = node.body.map((arg, i) => {
+
+            jsBody = node.body.map((arg, i) => {
                 const jsCode = generateJsForStatementOrExpr(arg);
-                if (i === node.body.length - 1) {
-                    return "return " + jsCode;
-                } else {
-                    return jsCode;
-                }
+                return jsCode;
             }).join(";\n");
-            return `function ${funcname}(${funcargs}){${funcbody}}`;
+            return `function ${funcName}(${paramList}) {\n${indent(jsBody)}\n}`;
         case "comment":
             return "";
     }
